@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Table</title>
+    <link rel="stylesheet" href="homepage.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Data Table</h1>
+      <form id="addDataForm">
+        <div class="form-group">
+          <label for="inputName">Name:</label>
+          <input type="text" id="inputName" required />
+        </div>
+        <div class="form-group">
+          <label for="inputAge">Age:</label>
+          <input type="number" id="inputAge" required />
+        </div>
+        <div class="form-group">
+          <label for="inputEmail">Email:</label>
+          <input type="email" id="inputEmail" required />
+        </div>
+        <div class="actions-btns">
+          <button type="button" onclick="addData()">Add</button>
+          <button type="reset">Clear</button>
+        </div>
+      </form>
+
+      <table id="dataTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Email</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <script src="homepage.js"></script>
+  </body>
+</html>
