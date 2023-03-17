@@ -1,3 +1,7 @@
+html,
+body {
+  height: 100%;
+}
 body {
   font-family: Arial, sans-serif;
   background-image: url("assets/img.jpg");
@@ -6,9 +10,8 @@ body {
   background-position: center center;
 }
 
-.login-container,
-.register-container {
-  width: 50%;
+.login-container {
+  width: 480px;
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
@@ -64,10 +67,6 @@ button:hover {
   width: auto;
   padding: 10px 18px;
   background-color: #f44336;
-}
-
-.container {
-  padding: 16px;
 }
 
 span.psw {
