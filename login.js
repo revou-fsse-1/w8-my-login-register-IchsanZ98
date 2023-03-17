@@ -1,90 +1,90 @@
-"use strict";
+const dummyUser = {
+  email: "test@example.com",
+  password: "Password1",
+};
+const users = JSON.parse(localStorage.getItem("users")) || [];
+const existingUser = users.find((user) => user.email === dummyUser.email);
 
-const email = localStorage.getItem("email");
-
-if (email) {
-  const nameData = document.querySelector(".name-data");
-  nameData.innerHTML = `Hello ${email}!`;
+if (!existingUser) {
+  users.push(dummyUser);
+  localStorage.setItem("users", JSON.stringify(users));
 }
 
-const data = [
-  { name: "John", age: 25, email: "john@example.com" },
-  { name: "Jane", age: 30, email: "jane@example.com" },
-  { name: "Bob", age: 35, email: "bob@example.com" },
-];
-
-const tableBody = document.querySelector("#dataTable tbody");
-
-function showData() {
-  const rows = data
-    .map(({ name, age, email }, index) => {
-      return `
-        <tr>
-          <td>${name}</td>
-          <td>${age}</td>
-          <td>${email}</td>
-          <td>
-            <button class="edit-btn" type="button" data-index="${index}">
-              Edit
-            </button>
-            <button class="delete-btn" type="button" data-index="${index}">
-              Delete
-            </button>
-          </td>
-        </tr>
-      `;
-    })
-    .join("");
-
-  tableBody.innerHTML = rows;
+function isValidEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
 }
 
-function addData() {
-  const name = document.querySelector("#inputName").value.trim();
-  const age = document.querySelector("#inputAge").value.trim();
-  const email = document.querySelector("#inputEmail").value.trim();
+function isValidPassword(password) {
+  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
+  return passwordRegex.test(password);
+}
 
-  if (!name || !age || !email) {
-    alert("Please enter all fields.");
-    return;
+function login() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  if (!isValidEmail(email)) {
+    alert("Invalid email address");
+    return false;
   }
 
-  data.push({ name, age, email });
-  showData();
-}
-
-function editData(index) {
-  const { name, age, email } = data[index];
-  const newNameAgeEmail = prompt("Enter new name, age, and email separated by commas:", `${name},${age},${email}`).split(",").map((input) => input.trim());
-
-  if (newNameAgeEmail.some((input) => !input)) {
-    alert("Please enter all fields.");
-    return;
+  if (!isValidPassword(password)) {
+    alert("Password must be at least 8 characters long");
+    return false;
   }
 
-  data[index] = { name: newNameAgeEmail[0], age: newNameAgeEmail[1], email: newNameAgeEmail[2] };
-  showData();
+  const users = JSON.parse(localStorage.getItem("users")) || [];
+  const user = users.find(
+    (user) => user.email === email && user.password === password
+  );
+
+  if (!user) {
+    alert("Invalid email or password");
+    return false;
+  }
+
+  localStorage.setItem("currentUser", JSON.stringify(user));
+
+  window.location.href = "homepage.html";
+
+  alert("Logged in successfully");
+  return true;
 }
 
-function deleteData(index) {
-  if (confirm("Are you sure you want to delete this data?")) {
-    data.splice(index, 1);
-    showData();
+function register() {
+  const email = document.getElementById("new-email").value;
+  const password = document.getElementById("new-password").value;
+
+  if (!isValidEmail(email)) {
+    alert("Invalid email address");
+    return false;
   }
+
+  if (!isValidPassword(password)) {
+    alert(
+      "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number"
+    );
+    return false;
+  }
+
+  const users = JSON.parse(localStorage.getItem("users")) || [];
+  const existingUser = users.find((user) => user.email === email);
+
+  if (existingUser) {
+    alert("User already exists");
+    return false;
+  }
+
+  const newUser = { email, password };
+  users.push(newUser);
+  localStorage.setItem("users", JSON.stringify(users));
+
+  alert("Registered successfully");
+  return true;
 }
 
-tableBody.addEventListener("click", (event) => {
-  const target = event.target;
-
-  if (target.classList.contains("edit-btn")) {
-    const index = target.dataset.index;
-    editData(index);
-  } else if (target.classList.contains("delete-btn")) {
-    const index = target.dataset.index;
-    deleteData(index);
-  }
-});
-
-window.addEventListener("load", () => {
-  showData();
-});
+function logout() {
+  localStorage.removeItem("currentUser");
+  alert("Logged out successfully");
+}
