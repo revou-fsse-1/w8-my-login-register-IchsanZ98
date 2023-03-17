@@ -74,10 +74,3 @@ span.psw {
   float: right;
   padding-top: 16px;
 }
-
-@media screen and (max-width: 600px) {
-  .login-container,
-  .register-container {
-    width: 80%;
-  }
-}
